@@ -1,0 +1,27 @@
+方案 1：本地 VS Code → GitHub → Kaggle Import
+
+    本地搭建项目
+        在 VS Code 中打开项目根目录，按前面说好的骨架创建 data/、notebooks/、src/…、requirements.txt、README.md 等文件夹／文件
+        安装依赖：
+
+        pip install -r requirements.txt
+
+        用 VS Code 的 Jupyter 插件编辑并运行各个 .ipynb，调试完成
+    用 Git 管理并推到 GitHub
+
+    git init
+    git add .
+    git commit -m "init Kaggle AI-Testing project"
+    git remote add origin git@github.com:你的用户名/仓库名.git
+    git push -u origin master
+
+    在 Kaggle 新建 Notebook → “Notebook from GitHub”
+        打开 Kaggle → Your Work → Notebooks → New Notebook
+        选择 “GitHub” 选项卡，输入你的仓库地址并点击 “Import”
+        Kaggle 会把你的目录和所有 .ipynb、脚本拉进来，这样左侧就能像本地一样浏览并直接编辑/运行
+    更新迭代
+        本地改完后 git push
+        在 Kaggle Notebook 页面点击 “Refresh” （左侧文件浏览上方）同步最新代码
+
+
+pip install pandas numpy scikit-learn matplotlib seaborn shap joblib

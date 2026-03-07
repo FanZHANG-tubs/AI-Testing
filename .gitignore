@@ -1,0 +1,26 @@
+# ─── Python 虚拟环境 ───
+.venv/
+env/
+venv/
+
+# ─── Byte-compiled / caching ───
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ─── Jupyter ───
+.ipynb_checkpoints
+
+# ─── 数据、模型、临时结果 ───
+data/raw/
+data/processed/
+models/
+results/
+
+# ─── VSCode, JetBrains 等编辑器 ───
+.vscode/
+.idea/
+
+# ─── OS 临时文件 ───
+.DS_Store
+Thumbs.db
