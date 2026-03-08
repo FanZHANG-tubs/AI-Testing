@@ -15,13 +15,13 @@ def make_sample_df():
         'Pclass':      [3, 1, 3, 1, 2],
         'Name':        ['A', 'B', 'C', 'D', 'E'],
         'Sex':         ['male', 'female', 'female', 'male', 'female'],
-        'Age':         [22.0, None, 26.0, None, 35.0],   # 含缺失
+        'Age':         [22.0, None, 26.0, None, 35.0],
         'SibSp':       [1, 1, 0, 0, 0],
         'Parch':       [0, 0, 0, 0, 0],
         'Ticket':      ['T1','T2','T3','T4','T5'],
-        'Fare':        [7.25, 999.0, 7.92, 53.1, 8.05], # 含异常值
+        'Fare':        [7.25, 999.0, 7.92, 53.1, 8.05],
         'Cabin':       [None, 'C85', None, 'C123', None],
-        'Embarked':    ['S', None, 'S', 'S', None],      # 含缺失
+        'Embarked':    ['S', 'C', 'S', 'Q', None],  # 确保有 S/C/Q 三个值
     })
 
 # 测试1：输出无缺失值
