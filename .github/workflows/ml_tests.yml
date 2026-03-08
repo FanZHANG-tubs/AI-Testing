@@ -1,0 +1,50 @@
+name: ML Test Pipeline
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run data contract tests
+        run: |
+          pytest working/src/tests/test_data_contract.py -v --tb=short
+
+      - name: Run unit tests
+        run: |
+          pytest working/src/tests/test_preprocess.py \
+                 working/src/tests/test_model.py -v --tb=short
+
+      - name: Run all tests with coverage
+        run: |
+          pytest working/src/tests/ -v \
+            --tb=short \
+            --cov=working/src \
+            --cov-report=term-missing \
+            --cov-report=html:results/coverage_report \
+            --html=results/test_report.html \
+            --self-contained-html
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-reports
+          path: results/
