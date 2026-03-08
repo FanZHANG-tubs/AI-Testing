@@ -1,7 +1,15 @@
 # src/tests/test_data_contract.py
 import pandas as pd
+import os
 import pandera.pandas as pa
 from pandera.pandas import Column, DataFrameSchema, Check
+
+
+# 在文件顶部定义基准路径
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print(BASE_DIR)
+RAW_PATH  = os.path.join(BASE_DIR, 'data', 'raw', 'train.csv')
+FEAT_PATH = os.path.join(BASE_DIR, 'data', 'processed', 'train_feat.csv')
 
 # 定义数据契约
 raw_schema = DataFrameSchema({
@@ -28,23 +36,23 @@ feat_schema = DataFrameSchema({
 })
 
 def test_raw_schema():
-    df = pd.read_csv(r'D:\AI_testing_HandsOn\working\data\raw\train.csv')
+    df = pd.read_csv(RAW_PATH)
     raw_schema.validate(df)
     print("[PASS] raw schema 验证通过")
 
 def test_feat_schema():
-    df = pd.read_csv(r'D:\AI_testing_HandsOn\working\data\processed\train_feat.csv')
+    df = pd.read_csv(FEAT_PATH)
     feat_schema.validate(df)
     print("[PASS] feat schema 验证通过")
 
 def test_no_duplicate_rows():
-    df = pd.read_csv(r'D:\AI_testing_HandsOn\working\data\raw\train.csv')
+    df = pd.read_csv(RAW_PATH)
     assert df.duplicated().sum() == 0, \
-        f"[FAIL] 存在重复行: {df.duplicated().sum()}"
-    print("[PASS] 无重复行")
+        f"[FAIL] 原始数据存在重复行: {df.duplicated().sum()}"
+    print("[PASS] 原始数据无重复行")
 
 def test_label_distribution():
-    df = pd.read_csv(r'D:\AI_testing_HandsOn\working\data\processed\train_feat.csv')
+    df = pd.read_csv(FEAT_PATH)
     ratio = df['Survived'].mean()
     assert 0.2 < ratio < 0.8, \
         f"[FAIL] 标签分布极度不平衡: {ratio:.4f}"

@@ -22,6 +22,28 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+      - name: Download Titanic dataset
+        run: |
+          mkdir -p working/data/raw
+          curl -L https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv \
+            -o working/data/raw/train.csv
+
+      - name: Generate processed data
+        run: |
+          cd working
+          python -c "
+          import pandas as pd, sys
+          sys.path.insert(0, 'src')
+          from preprocess import preprocess
+          import os
+          df = pd.read_csv('data/raw/train.csv')
+          df_feat = preprocess(df)
+          os.makedirs('data/processed', exist_ok=True)
+          df.to_csv('data/processed/train_raw.csv', index=False)
+          df_feat.to_csv('data/processed/train_feat.csv', index=False)
+          print('processed data generated')
+          "   
+
       - name: Run data contract tests
         run: |
           pytest working/src/tests/test_data_contract.py -v --tb=short
