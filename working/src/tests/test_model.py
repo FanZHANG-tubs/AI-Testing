@@ -1,4 +1,4 @@
-# src/tests/test_model.py
+
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from model import train_model, evaluate_model
 
 def make_mock_data(n=200):
-    """生成小型模拟数据"""
+    """generate small mock data"""
     np.random.seed(42)
     X = pd.DataFrame({
         'Pclass':      np.random.choice([1,2,3], n),
@@ -24,7 +24,7 @@ def make_mock_data(n=200):
     y = pd.Series(np.random.choice([0,1], n))
     return X, y
 
-# 测试1：预测标签范围合法（只含 0/1）
+# Test 1: Predicted labels are valid (only contain 0/1)
 def test_predict_labels_valid():
     X, y = make_mock_data()
     X_train, X_test, y_train, y_test = train_test_split(
@@ -33,9 +33,9 @@ def test_predict_labels_valid():
     model, _ = train_model(X_train, y_train)
     y_pred = model.predict(X_test)
     assert set(y_pred).issubset({0, 1}), \
-        f"[FAIL] 预测值超出范围: {set(y_pred)}"
+        f"[FAIL] Predicted values are out of range: {set(y_pred)}"
 
-# 测试2：CV 分数在合理区间
+# Test 2: CV scores are within a reasonable range
 def test_cv_scores_range():
     X, y = make_mock_data()
     X_train, X_test, y_train, y_test = train_test_split(
@@ -43,11 +43,11 @@ def test_cv_scores_range():
     )
     _, cv_scores = train_model(X_train, y_train)
     assert cv_scores.mean() > 0.4, \
-        f"[FAIL] CV 均值过低: {cv_scores.mean():.4f}"
+        f"[FAIL] CV mean is too low: {cv_scores.mean():.4f}"
     assert cv_scores.mean() <= 1.0, \
-        f"[FAIL] CV 均值异常: {cv_scores.mean():.4f}"
+        f"[FAIL] CV mean is out of range: {cv_scores.mean():.4f}"
 
-# 测试3：evaluate_model 返回合法 accuracy
+# Test 3: evaluate_model returns a valid accuracy
 def test_evaluate_model_accuracy():
     X, y = make_mock_data()
     X_train, X_test, y_train, y_test = train_test_split(
@@ -56,6 +56,6 @@ def test_evaluate_model_accuracy():
     model, _ = train_model(X_train, y_train)
     acc, report = evaluate_model(model, X_test, y_test)
     assert 0.0 <= acc <= 1.0, \
-        f"[FAIL] accuracy 超出范围: {acc}"
+        f"[FAIL] accuracy is out of range: {acc}"
     assert isinstance(report, str), \
-        "[FAIL] report 不是字符串"
+        "[FAIL] report is not a string"

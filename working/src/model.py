@@ -1,4 +1,4 @@
-# src/model.py
+
 import joblib
 import os
 from sklearn.ensemble import RandomForestClassifier
@@ -6,7 +6,7 @@ from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.metrics import accuracy_score, classification_report
 
 def train_model(X_train, y_train, n_estimators=100, random_state=42):
-    """训练 RandomForest，返回模型和 CV 分数"""
+    """Training RandomForest, returning the model and CV scores"""
     model = RandomForestClassifier(
         n_estimators=n_estimators,
         random_state=random_state
@@ -17,7 +17,7 @@ def train_model(X_train, y_train, n_estimators=100, random_state=42):
     return model, cv_scores
 
 def evaluate_model(model, X_test, y_test):
-    """输出 accuracy 和 classification_report"""
+    """Evaluating the model, returning accuracy and classification report"""
     y_pred = model.predict(X_test)
     acc    = accuracy_score(y_test, y_pred)
     report = classification_report(

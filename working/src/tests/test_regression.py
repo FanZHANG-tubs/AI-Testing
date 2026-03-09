@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, roc_auc_score
 
-# 路径基准
+# Base path directory
 BASE_DIR      = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DATA_PATH     = os.path.join(BASE_DIR, 'data', 'processed', 'train_feat.csv')
 MODEL_PATH    = os.path.join(BASE_DIR, 'models', 'randomforest.joblib')
@@ -30,7 +30,7 @@ def test_accuracy_above_threshold():
     X_test, y_test = load_data()
     acc = accuracy_score(y_test, model.predict(X_test))
     assert acc >= THRESHOLDS['accuracy'], \
-        f"[FAIL] accuracy {acc:.4f} < 门槛 {THRESHOLDS['accuracy']}"
+        f"[FAIL] accuracy {acc:.4f} < threshold {THRESHOLDS['accuracy']}"
     print(f"[PASS] accuracy={acc:.4f} >= {THRESHOLDS['accuracy']}")
 
 def test_auc_above_threshold():
@@ -38,12 +38,12 @@ def test_auc_above_threshold():
     X_test, y_test = load_data()
     auc = roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
     assert auc >= THRESHOLDS['auc'], \
-        f"[FAIL] auc {auc:.4f} < 门槛 {THRESHOLDS['auc']}"
+        f"[FAIL] auc {auc:.4f} < threshold {THRESHOLDS['auc']}"
     print(f"[PASS] auc={auc:.4f} >= {THRESHOLDS['auc']}")
 
 def test_no_regression_vs_baseline():
     if not os.path.exists(BASELINE_PATH):
-        print("[SKIP] 无基准文件，跳过回归测试")
+        print("[SKIP] No baseline file, skipping regression test")
         return
     with open(BASELINE_PATH) as f:
         baseline = json.load(f)
@@ -52,10 +52,10 @@ def test_no_regression_vs_baseline():
     acc = accuracy_score(y_test, model.predict(X_test))
     auc = roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
     assert acc >= baseline['accuracy'] - 0.02, \
-        f"[FAIL] accuracy 回退: {acc:.4f} vs baseline {baseline['accuracy']:.4f}"
+        f"[FAIL] accuracy regression: {acc:.4f} vs baseline {baseline['accuracy']:.4f}"
     assert auc >= baseline['auc'] - 0.02, \
-        f"[FAIL] auc 回退: {auc:.4f} vs baseline {baseline['auc']:.4f}"
-    print(f"[PASS] 无性能回退  acc={acc:.4f}  auc={auc:.4f}")
+        f"[FAIL] auc regression: {auc:.4f} vs baseline {baseline['auc']:.4f}"
+    print(f"[PASS] No performance regression  acc={acc:.4f}  auc={auc:.4f}")
 
 def save_baseline():
     model = joblib.load(MODEL_PATH)
@@ -68,7 +68,7 @@ def save_baseline():
     os.makedirs(os.path.dirname(BASELINE_PATH), exist_ok=True)
     with open(BASELINE_PATH, 'w') as f:
         json.dump(metrics, f, indent=2)
-    print(f"[PASS] 基准已保存: {metrics}")
+    print(f"[PASS] Baseline saved: {metrics}")
 
 if __name__ == '__main__':
     save_baseline()
