@@ -43,7 +43,26 @@ jobs:
           df_feat.to_csv('data/processed/train_feat.csv', index=False)
           print('processed data generated')
           "   
-
+      - name: Train and save model
+        run: |
+          cd working
+          python -c "
+          import pandas as pd, sys, os
+          sys.path.insert(0, 'src')
+          from preprocess import preprocess
+          from model import train_model
+          import joblib
+          df = pd.read_csv('data/processed/train_feat.csv')
+          X = df.drop(columns=['Survived'])
+          y = df['Survived']
+          from sklearn.model_selection import train_test_split
+          X_train, _, y_train, _ = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+          model, _ = train_model(X_train, y_train)
+          os.makedirs('models', exist_ok=True)
+          joblib.dump(model, 'models/randomforest.joblib')
+          print('Model saved')
+          "
+          
       - name: Run data contract tests
         run: |
           pytest working/src/tests/test_data_contract.py -v --tb=short
