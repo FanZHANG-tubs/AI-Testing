@@ -180,6 +180,8 @@ Every push to `master` or `main` triggers the full pipeline:
 
 Pipeline config: [`.github/workflows/ml_tests.yml`](.github/workflows/ml_tests.yml)
 
+The pipeline was iteratively improved through several runs.
+Current status: all 14 tests passing.
 ---
 
 ## Tech Stack
